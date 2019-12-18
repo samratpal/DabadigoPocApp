@@ -28,5 +28,6 @@
     </ion-button>
     <ion-progress-bar type="indeterminate" *ngIf="gettingChecksum"></ion-progress-bar><br><br>
     <ion-label *ngIf="checksumGenerated"><strong>Checksum  Generated:</strong> {{checksumGenerated}}</ion-label>
+    <ion-label *ngIf="httpError"><strong>Http Error:</strong> {{httpError}}</ion-label>
 
 </ion-content>

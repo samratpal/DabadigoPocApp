@@ -10,6 +10,7 @@ import { CommonService } from './../../common/services/common.service';
 })
 
 export class WalletPage implements OnInit {
+  httpError: string;
   orderId : string;
   gettingChecksum = false;
   checksumGenerated = null;
@@ -25,6 +26,8 @@ export class WalletPage implements OnInit {
   }
 
   getChecksum(enteredAmount){
+    this.httpError = '';
+    this.checksumGenerated = null;
     const rechargeAmount = parseInt(enteredAmount).toFixed(2).toString();
     console.log('Amount: ' + rechargeAmount);
     const orderId = 'ORDER000' + (Math.round(Math.random() * 1000000)).toString(); 
@@ -48,6 +51,9 @@ export class WalletPage implements OnInit {
       console.log('checksum received: ', JSON.stringify(response));
       this.checksumGenerated  = response['CHECKSUMHASH'];
       this.startPayment(oDetails, response);      
+    },(error) => {
+      this.gettingChecksum = false;      
+      this.httpError = error;
     })
 	  
   }
