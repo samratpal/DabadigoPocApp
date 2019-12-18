@@ -1,0 +1,39 @@
+.signup-wrapper{    
+    --background: #fff url('../../../assets/images/login_bg.png') no-repeat center center / 100% 100%;
+}
+.signup-form{
+    margin: 190px 10% 0px;
+    padding: 20px;
+    border-radius: 25px;
+    background-color: #fff;
+    border: 1px solid #8Fc84B;
+    font-family: 'Roboto Regular';
+}
+.signup-field-item{
+    --padding-start: 0px;
+    border-bottom: 1px solid #8Fc84B;
+}
+.mobile-no-field{
+    --padding-bottom: 0px;
+}
+.signup-btn{
+    --background: #8Fc84B;
+    --background-hover: #8Fc84B;
+    --border-radius: 35px;
+}
+.sign-up-text{
+    vertical-align: sub;
+}
+.signup-field-item.confirm-cb{
+    border-bottom: none;
+    --border-width: 0px;
+    --inner-border-width: 0px;    
+    ion-checkbox{
+        margin-right: 10px;
+        --border-width: 0px;
+        --inner-border-width: 0px;
+    }
+    .confirm-label{
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "DabadigoPocApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,52 @@
+<ion-content class="signup-wrapper">
+    <ion-grid class="signup-form">
+      <form>
+        <ion-row class="signup-form-row mob-no-row">
+          <ion-col class="signup-form-col">
+            <ion-item class="signup-field-item">
+              <ion-label position="floating">User Name</ion-label>
+              <ion-input type="text" class="mobile-no-field"></ion-input>
+            </ion-item>				
+          </ion-col>
+        </ion-row>
+        <ion-row class="signup-form-row mob-no-row">
+          <ion-col class="signup-form-col">
+            <ion-item class="signup-field-item">
+              <ion-label position="floating">Mobile no.</ion-label>
+              <ion-input type="tel" class="mobile-no-field"></ion-input>
+            </ion-item>				
+          </ion-col>
+        </ion-row>
+        <ion-row class="signup-form-row mob-no-row">
+          <ion-col class="signup-form-col">
+            <ion-item class="signup-field-item">
+              <ion-label position="floating">Email Id</ion-label>
+              <ion-input type="email" class="mobile-no-field"></ion-input>
+            </ion-item>				
+          </ion-col>
+        </ion-row>
+        <ion-row class="signup-form-row mob-no-row">
+          <ion-col class="signup-form-col">
+            <ion-item class="signup-field-item">
+              <ion-label position="floating">Password</ion-label>
+              <ion-input type="password" class="mobile-no-field"></ion-input>
+            </ion-item>				
+          </ion-col>
+        </ion-row>
+        <ion-row class="signup-form-row mob-no-row">
+            <ion-col class="signup-form-col">
+              <ion-item class="signup-field-item confirm-cb">
+                  <ion-label class="confirm-label">I confirm I am over 18 years old</ion-label>
+                  <ion-checkbox color="primary" checked slot="start"></ion-checkbox>
+              </ion-item>				
+            </ion-col>
+          </ion-row>
+        <ion-row class="signup-form-row signup-btn-row">
+          <ion-col class="signup-form-col">
+            <ion-button (click)="navigateToLogin()" expand="block" fill="solid" class="signup-btn">Sign Up</ion-button>
+          </ion-col>
+        </ion-row>
+      </form>      
+    </ion-grid>
+  </ion-content>
+  

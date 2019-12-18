@@ -1,0 +1,17 @@
+
+ionic start DabadigoPocApp sidemenu --type=angular --cordova --package-id=com.dabadigopoc.app
+cd DabadigoPocApp 
+ionic cordova platform add android@8.1.0
+
+--------------------------------------------
+•	Test Merchant ID AjvmhF55300080944054
+•	Test Merchant Key wORlkHeA9_qsyu47
+•	Website WEBSTAGING
+•	Industry Type Retail
+•	Channel ID (For Website) WEB
+•	Channel ID (For Mobile Apps) WAP
+--------------------------------------------
+
+/*----------Cordova Paytm Plugin documentation for Ionic Projects says value of WEBSITE should be APPSTAGING-----------*/
+
+ionic cordova plugin add cordova-plugin-paytm --variable MERCHANT_ID=AjvmhF55300080944054 --variable INDUSTRY_TYPE_ID=Retail --variable WEBSITE=APPSTAGING --save

@@ -1,0 +1,29 @@
+.login-wrapper{    
+    --background: #fff url('../../../assets/images/login_bg.png') no-repeat center center / 100% 100%;
+}
+.login-form{
+    margin: 300px 10% 0px;
+    padding: 20px;
+    border-radius: 25px;
+    background-color: #fff;
+    border: 1px solid #8Fc84B;
+    font-family: 'Roboto Regular';
+}
+.mob-no-row{
+    margin-bottom: 20px;
+}
+.login-field-item{
+    --padding-start: 0px;
+    border-bottom: 1px solid #8Fc84B;
+}
+.mobile-no-field{
+    --padding-bottom: 0px;
+}
+.login-btn{
+    --background: #8Fc84B;
+    --background-hover: #8Fc84B;
+    --border-radius: 35px;
+}
+.sign-up-text{
+    vertical-align: sub;
+}

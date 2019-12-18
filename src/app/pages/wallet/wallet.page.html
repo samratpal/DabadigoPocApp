@@ -1,0 +1,32 @@
+<ion-header>
+	<ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        <ion-menu-button menu="appMenu"></ion-menu-button>
+      </ion-buttons>
+		<ion-title>
+			My Wallet
+		</ion-title>
+		<ion-buttons slot="end">
+			<ion-button color="secondary" (click)="logOutUser()">
+				<ion-icon slot="icon-only" name="log-out"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+	</ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+	<ion-item style="margin-bottom: 20px;margin-top: 50px;--inner-border-width:0px;">
+    <ion-label>
+      <strong>Current Balance&nbsp;&#58;&nbsp;&#8377;0</strong>
+    </ion-label>
+  </ion-item>
+  <ion-item style="margin-bottom: 30px;">
+    <ion-label position="floating">Enter Amout to recharge</ion-label>
+    <ion-input type="number" value="1" placeholder="Enter Amout" #amount></ion-input>
+  </ion-item>
+    <ion-button expand="block" (click)="getChecksum(amount.value)">
+      Recharge
+    </ion-button>
+    <ion-progress-bar type="indeterminate" *ngIf="gettingChecksum"></ion-progress-bar><br><br>
+    <ion-label *ngIf="checksumGenerated"><strong>Checksum  Generated:</strong> {{checksumGenerated}}</ion-label>
+
+</ion-content>

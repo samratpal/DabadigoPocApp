@@ -1,0 +1,25 @@
+<ion-header>
+	<ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        <ion-menu-button menu="appMenu"></ion-menu-button>
+      </ion-buttons>
+		<ion-title>
+			Welcome Home
+		</ion-title>
+		<ion-buttons slot="end">
+			<ion-button color="secondary" (click)="logOutUser()">
+				<ion-icon slot="icon-only" name="log-out"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+	<div class="home-wrapper">
+		<img src="../../../assets/images/wip.jpg" class="wip">
+	</div>	
+	<!-- <ion-list>
+		<ion-item [routerLink]="['/task']">
+			<ion-label>Go to Task</ion-label>
+		</ion-item>
+	</ion-list>	 -->
+</ion-content>
