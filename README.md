@@ -1,4 +1,3 @@
-# DabadigoPocApp
 
 This is a Cordova Ionic Project targeting Android Platform to work on the Proof of Concept on Various Functionality.
 
