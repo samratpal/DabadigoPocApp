@@ -10,15 +10,24 @@ import { CommonService } from './../../common/services/common.service';
 })
 
 export class WalletPage implements OnInit {
-  httpError: string;
   orderId : string;
-  gettingChecksum = false;
-  checksumGenerated = null;
+  public customerBalanace: string;
+
+  txnRequest = {
+    "MID": "AjvmhF55300080944054",
+    "ORDER_ID": "ORDER0000000008",
+    "CUST_ID": "",
+    "INDUSTRY_TYPE_ID": "Retail",       // PayTM Credentials
+    "CHANNEL_ID": "WAP",                // PayTM Credentials
+    "TXN_AMOUNT": "",                  // Transaction Amount should be a String
+    "WEBSITE": "APPSTAGING",            // PayTM Credentials
+    "CALLBACK_URL": ""
+  }
 
   constructor(private router: Router,private commonService: CommonService, private platform: Platform) { }
 
   ngOnInit() {
-
+    this.customerBalanace = '0';
   }
   logOutUser(){
 	  this.router.navigate(['/login']);
@@ -26,73 +35,68 @@ export class WalletPage implements OnInit {
   }
 
   getChecksum(enteredAmount){
-    this.httpError = '';
-    this.checksumGenerated = null;
+    
     const rechargeAmount = parseInt(enteredAmount).toFixed(2).toString();
     console.log('Amount: ' + rechargeAmount);
     const orderId = 'ORDER000' + (Math.round(Math.random() * 1000000)).toString(); 
     console.log('generated order Id:  ' + orderId);
 
-    let oDetails = {
-        'order_id': orderId,
-        'customer_id' : 'CUST00012',
-        'txn_amount': rechargeAmount,
-        'email': 'test.email@test.com',
-        'phone': '1234567890',
-        'callback_url': 'https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp',
-        // 'callback_url': 'https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=' + orderId,
-        'website': 'APPSTAGING',
-        'industry_type_id': 'Retail',
-        'channel_id': 'WAP'
-    }
-    this.gettingChecksum = true;
-    this.commonService.generateChecksum(oDetails).subscribe((response) =>{
-      this.gettingChecksum = false;
-      console.log('checksum received: ', JSON.stringify(response));
-      this.checksumGenerated  = response['CHECKSUMHASH'];
-      this.startPayment(oDetails, response);      
+    this.txnRequest.CUST_ID = "1",
+    this.txnRequest.ORDER_ID = orderId,
+    this.txnRequest.TXN_AMOUNT = rechargeAmount;
+    this.txnRequest.CALLBACK_URL = ("https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=" + this.txnRequest.ORDER_ID);
+    this.commonService.showLoading('Intiating transction');
+    this.commonService.generateChecksum(this.txnRequest).subscribe((response) =>{
+      this.commonService.hideLoading();
+      console.log('generateChecksum response: ', JSON.stringify(response));      
+      response["ENVIRONMENT"] = "staging";
+      this.startPayment(response);
     },(error) => {
-      this.gettingChecksum = false;      
-      this.httpError = error;
-    })
-	  
+      this.commonService.hideLoading();
+      this.commonService.showIonicAlert('error', error);
+    })	  
   }
 
-  startPayment(orderDetails, data){
+  startPayment(data){
     console.log('starting payment...');
-    console.log('orderDetails received: ' + JSON.stringify(orderDetails));
     console.log('checksum received: ' + data.CHECKSUMHASH);
-    let txnRequest = {
-        'MID': 'AjvmhF55300080944054',
-        'ORDER_ID': orderDetails.order_id,
-        'CUST_ID': orderDetails.customer_id,
-        'INDUSTRY_TYPE_ID': orderDetails.industry_type_id,
-        'CHANNEL_ID': orderDetails.channel_id,
-        'TXN_AMOUNT': orderDetails.txn_amount,
-        'WEBSITE': orderDetails.website,
-		    'CHECKSUMHASH': data.CHECKSUMHASH
-    }
-    // txnRequest['CALLBACK_URL'] = 'https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=' + txnRequest.ORDER_ID;
-    txnRequest['CALLBACK_URL'] = 'https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp';
-    txnRequest['ENVIRONMENT'] = 'staging';
 
-    const successCallback = (response) => {
+    const paymentSuccessCallback = (response) => {
 		  console.log("Paytm Plugin startPayment Success Callback response:", response);
       if (response.STATUS == 'TXN_SUCCESS') {
+        this.commonService.showLoading('Verifying transction');
+        this.commonService.verifyChecksum(response).subscribe((data) =>{
+          this.commonService.hideLoading();
+          console.log('verifyChecksum response: ', JSON.stringify(data));
+          if(data.txtStatus){
+            this.commonService.showToastMessge('Recharge of ' + parseInt(response.TXNAMOUNT) + ' is successful');
+            let totalBalance = parseInt(this.customerBalanace) + parseInt(response.TXNAMOUNT);
+            this.customerBalanace = totalBalance.toString();
+            document.getElementById("balance").innerHTML = totalBalance.toString();
+
+          } else{
+            this.commonService.showToastMessge("recharge failed");
+          }
+        },(error) => {
+          this.commonService.hideLoading();
+          console.log(`verifyChecksum http error: ${error}`);
+          this.commonService.showIonicAlert('error', error);
+        })
       } else {
-          alert(`Transaction Failed for reason: - ${response.RESPMSG} (${response.RESPCODE})`);
+          console.log(`Transaction Failed for reason: - ${response.RESPMSG} (${response.RESPCODE})`);
+          this.commonService.showIonicAlert('error', response.RESPMSG);
       }
     }
 
-    const failureCallback = (error) => {
+    const paymentFailureCallback = (error) => {
 		  console.log("Paytm Plugin startPayment Error Callback response:", error);
-      alert(`Transaction Failed for reason: - ${error.RESPMSG} (${error.RESPCODE})`);
+      this.commonService.showIonicAlert('error', error.RESPMSG); 
     }
 
-    console.log('final txnRequest: ', JSON.stringify(txnRequest));
+    console.log('final txnRequest: ', JSON.stringify(data));
     console.log("App running on: " + this.platform.platforms());
     if(this.platform.is('android')){
-      (<any>window).paytm.startPayment(txnRequest, successCallback, failureCallback);
+      (<any>window).paytm.startPayment(data, paymentSuccessCallback, paymentFailureCallback);
     }
   }
 
